@@ -11,11 +11,13 @@ module data_path_unit(
     input reg_dst,
     input mem_to_reg,
     input bne_control,
+    input [31:0] imm_val,
+    input [3:0] shamt,
+    input lb,
+    input sw,
     input bge_control,
     input blt_control,
     input lui_control,
-    input lb,
-    input sw,
     input [31:0] imm_val_lui,
     input [31:0] imm_val_jump,
     input [31:0] return_address,
@@ -66,4 +68,21 @@ always@(posedge clk)
         pc_current <= pc_next;
     end
 
-assign pc2 
+assign pc2 = pc_current + 4;
+assign jump_shift = {instr [11:0], 1'b0};
+assign reg_read_addr_1 = instr [13:10];
+assign reg_read_addr_2 = instr [9:6];
+assign read_data_addr_dm = read_data_addr_dm_2;
+
+assign beq = (write_data_alu == 1 && beq_control == 1) ? 1 : 0;
+assign bne = (write_data_alu == 1 && bne_control == 1) ? 1 : 0;
+assign bge = (write_data_alu == 1 && bge_control == 1) ? 1 : 0;
+assign blt = (write_data_alu == 1 && blt_control == 1) ? 1 : 0;
+
+assign ext_imm = {{10{instr [31]}}, instr [31:21]};
+assign pc_beq = pc2 + {ext_imm [31:21], 1'b0};
+assign pc_bne = pc2 + {ext_imm [31:21], 1'b0};
+
+assign reg_write_dest = (reg_dst == 1'b1) ? instr [24:20] : instr [19:15];
+
+endmodule
