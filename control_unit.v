@@ -109,6 +109,40 @@ always@(funct7 or funct3 or opcode)
                     3'b110: alu_control = 6'b010010; // ori
                     3'b111: alu_control = 6'b010011; // andi
                 endcase
+            end
+
+        else if(opcode == 7'b0000011)
+            begin
+                mem_to_reg = 0;
+                beq_control = 0;
+                bne_control = 0;
+                blt_control = 0;
+                bge_control = 0;
+                jump = 0;
+                lb = 0;
+                sw = 0;
+
+                case(funct3)
+                    3'b000: alu_control = 6'b010100; // lb
+                    3'b001: alu_control = 6'b010101; // lh
+                    3'b010: alu_control = 6'b010110; // lw
+                    3'b100: alu_control = 6'b010111; // lbu
+                    3'b101: alu_control = 6'b011000; // lhu
+                endcase
+            end
+
+        else if(opcode == 7'b0010111)
+            begin
+                alu_control = 6'b100001
+                mem_to_reg = 0;
+                beq_control = 0;
+                bne_control = 0;
+                blt_control = 0;
+                bge_control = 0;
+                lui_control = 1;
+                jump = 0;
+                lb = 0;
+                sw = 0;
             end                    
     end
 endmodule
