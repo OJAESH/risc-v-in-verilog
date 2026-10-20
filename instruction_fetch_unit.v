@@ -1,5 +1,3 @@
-`timescale 1ns / 1ps
-
 module instruction_fetch_unit(
     input clk,
     input reset,
