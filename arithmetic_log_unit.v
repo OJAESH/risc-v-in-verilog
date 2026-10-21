@@ -29,6 +29,10 @@ always@(*)
             6'b010001: result = src1 >>> shamt; // srai
             6'b010010: result = src1 | imm_val_r; // ori
             6'b010011: result = src1 & imm_val_r; // andi
+            6'b011011: result = (src1 == src2) ? 1 : 0; // beq
+            6'b011100: result = (src1 != src2) ? 1 : 0; // bne
+            6'b011101: result = (src1 < src2) ? 1 : 0; // blt
+            6'b011110: result = (src1 >= src2) ? 1 : 0; // bge
         endcase
     end
 endmodule

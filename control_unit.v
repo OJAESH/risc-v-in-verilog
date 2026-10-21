@@ -17,13 +17,13 @@ module control_unit(
 
 always@(reset)
     begin
-        if(reset)
+        if (reset)
             alu_control = 0;
     end
 
 always@(funct7 or funct3 or opcode)
     begin
-        if(opcode = 7'b0110011)
+        if (opcode = 7'b0110011)
             begin
                 mem_to_reg = 0;
                 beq_control = 0;
@@ -33,7 +33,7 @@ always@(funct7 or funct3 or opcode)
                 jump = 0;
                 lui_control = 0;
 
-                case(funct3)
+                case (funct3)
                     3'b000:
                         begin
                             if (funct7 == 0)
@@ -82,7 +82,7 @@ always@(funct7 or funct3 or opcode)
                 endcase
             end
 
-        else if(opcode == 7'b0010011)
+        else if (opcode == 7'b0010011)
             begin
                 mem_to_reg = 0;
                 beq_control = 0;
@@ -93,7 +93,7 @@ always@(funct7 or funct3 or opcode)
                 lb = 0;
                 sw = 0;
 
-                case(funct3)
+                case (funct3)
                     3'b000: alu_control = 6'b001011; // addi
                     3'b001: alu_control = 6'b001100; // slli
                     3'b010: alu_control = 6'b001101; // slti
@@ -111,7 +111,7 @@ always@(funct7 or funct3 or opcode)
                 endcase
             end
 
-        else if(opcode == 7'b0000011)
+        else if (opcode == 7'b0000011)
             begin
                 mem_to_reg = 0;
                 beq_control = 0;
@@ -122,7 +122,7 @@ always@(funct7 or funct3 or opcode)
                 lb = 0;
                 sw = 0;
 
-                case(funct3)
+                case (funct3)
                     3'b000: alu_control = 6'b010100; // lb
                     3'b001: alu_control = 6'b010101; // lh
                     3'b010: alu_control = 6'b010110; // lw
@@ -131,7 +131,45 @@ always@(funct7 or funct3 or opcode)
                 endcase
             end
 
-        else if(opcode == 7'b0010111)
+        else if (opcode == 7'b1100011)
+            begin
+                case (funct3)
+                    3'b000:
+                        begin
+                            alu_control = 6'b011011; // beq
+                            beq_control = 1;
+                            bne_control = 0;
+                            blt_control = 0;
+                            bge_control = 0;
+                        end
+                    3'b001:
+                        begin
+                            alu_control = 6'b011100; // bne 
+                            beq_control = 0;
+                            bne_control = 1;
+                            blt_control = 0;
+                            bge_control = 0;
+                        end
+                    3'b100:
+                        begin
+                            alu_control = 6'b011101; // blt
+                            beq_control = 0;
+                            bne_control = 0;
+                            blt_control = 1;
+                            bge_control = 0;
+                        end
+                    3'b101:
+                        begin
+                            alu_control = 6'b011110; // bge
+                            beq_control = 0;
+                            bne_control = 0;
+                            blt_control = 0;
+                            bge_control = 1;
+                        end
+                endcase
+            end
+
+        else if (opcode == 7'b0010111)
             begin
                 alu_control = 6'b100001
                 mem_to_reg = 0;
